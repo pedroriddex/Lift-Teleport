@@ -8,6 +8,8 @@ Primer esqueleto del plugin **Lift Teleport** para WordPress.
 - Pantalla de administración con enfoque de producto para Lift.
 - Prototipo visual de importación por drag & drop de archivos `.lift`.
 - Simulación de progreso para validar UX mientras se construye el motor real de migración.
+- Especificación inicial del formato `.lift` en `docs/lift-format.md`.
+- Validadores de esquema para exporter/importer con errores diagnósticos (`WP_Error`).
 
 ## Próximos pasos sugeridos
 

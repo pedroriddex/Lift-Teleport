@@ -34,9 +34,43 @@
           <div class="lift-teleport__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
         </div>
         <p class="lift-teleport__status">Esperando archivo .lift…</p>
+        <div class="lift-teleport__result">
+          <p class="lift-teleport__result-message">Importación completada correctamente.</p>
+          <details>
+            <summary>Ver detalle técnico</summary>
+            <pre class="lift-teleport__result-technical">Job: demo-job
+Estado: completed
+Fase: done
+Duración: 842ms
+Chunks: 8/8
+Mensaje técnico: Todos los chunks fueron procesados y verificados.
+Errores: ninguno</pre>
+          </details>
+        </div>
       </section>
     </div>
+    <section class="lift-teleport__history">
+      <div class="lift-teleport__history-head">
+        <h2>Historial de migraciones</h2>
+        <button type="button" class="button" id="lift-teleport-refresh-history">Actualizar</button>
+      </div>
+      <div class="lift-teleport__table-wrap">
+        <table class="widefat striped" id="lift-teleport-history-table">
+          <thead>
+            <tr>
+              <th>Job ID</th><th>Archivo</th><th>Estado</th><th>Fase</th><th>Duración</th><th>Chunks</th><th>Errores</th><th>Reporte</th>
+            </tr>
+          </thead>
+          <tbody id="lift-teleport-history-body" data-empty-message="Aún no hay migraciones ejecutadas.">
+            <tr><td><code>demo-job</code></td><td>site.lift</td><td>COMPLETED</td><td>done</td><td>842 ms</td><td>8/8</td><td>0</td><td><a class="button button-secondary" href="#">Descargar</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
+  <script>
+    window.liftTeleportAdmin = { ajaxUrl: '', nonce: '', reportNonce: '', adminPostUrl: '' };
+  </script>
   <script src="../assets/js/admin.js"></script>
 </body>
 </html>
