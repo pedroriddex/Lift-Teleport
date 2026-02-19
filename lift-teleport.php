@@ -22,23 +22,18 @@ require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-admin.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-exporter.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-importer.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-package-validator.php';
-require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-exporter.php';
-require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-importer.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-security.php';
 
 function lift_teleport_bootstrap() {
-	$validator = new Lift_Teleport_Package_Validator();
-
-	new Lift_Teleport_Admin();
-	new Lift_Teleport_Exporter();
-	new Lift_Teleport_Importer();
-	new Lift_Teleport_Exporter( $validator );
-	new Lift_Teleport_Importer( $validator );
-	$security = new Lift_Teleport_Security();
-	$security->register_hooks();
 	$logger            = new Lift_Teleport_Logger();
 	$migration_manager = new Lift_Teleport_Migration_Manager( $logger );
+
 	new Lift_Teleport_Admin( $migration_manager );
+	new Lift_Teleport_Exporter();
+	new Lift_Teleport_Importer();
+
+	$security = new Lift_Teleport_Security();
+	$security->register_hooks();
 }
 
 add_action( 'plugins_loaded', 'lift_teleport_bootstrap' );

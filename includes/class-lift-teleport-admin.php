@@ -68,31 +68,19 @@ class Lift_Teleport_Admin {
 			'lift-teleport-admin',
 			'liftTeleportAdmin',
 			array(
-				'restUrl' => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
-
-		wp_localize_script(
-			'lift-teleport-admin',
-			'liftTeleportConfig',
-			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'initNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
-				'batchNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
-			)
-		);
-			'liftTeleportAdmin',
-			array(
+				'restUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
+				'exportRestUrl'=> esc_url_raw( rest_url( 'lift-teleport/v1/export' ) ),
 				'baseUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
 				'pollInterval' => 2000,
-				'retryBaseMs'  => 400,
+				'retryBaseMs'   => 400,
 				'retryMaxAttempts' => 4,
-				'nonce'        => wp_create_nonce( 'wp_rest' ),
-			)
-		);
-				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-				'nonce'       => wp_create_nonce( 'lift_teleport_admin_nonce' ),
+				'restNonce'    => wp_create_nonce( 'wp_rest' ),
+				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+				'ajaxNonce'    => wp_create_nonce( 'lift_teleport_admin_nonce' ),
 				'reportNonce' => wp_create_nonce( 'lift_teleport_download_report' ),
 				'adminPostUrl' => admin_url( 'admin-post.php' ),
+				'initNonce'   => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
+				'batchNonce'  => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
 			)
 		);
 	}
@@ -168,9 +156,10 @@ class Lift_Teleport_Admin {
 				<section class="lift-teleport__card">
 					<h2><?php esc_html_e( 'Exportar sitio', 'lift-teleport' ); ?></h2>
 					<p><?php esc_html_e( 'Empaqueta base de datos, media, plugins y temas en un archivo .lift.', 'lift-teleport' ); ?></p>
-					<button class="button button-primary button-hero" type="button" disabled>
-						<?php esc_html_e( 'Iniciar exportación (próximamente)', 'lift-teleport' ); ?>
+					<button class="button button-primary button-hero" type="button" id="lift-teleport-export-start">
+						<?php esc_html_e( 'Iniciar exportación', 'lift-teleport' ); ?>
 					</button>
+					<p id="lift-teleport-export-status" class="lift-teleport__status"><?php esc_html_e( 'Listo para exportar.', 'lift-teleport' ); ?></p>
 				</section>
 
 				<section class="lift-teleport__card">
