@@ -67,6 +67,13 @@ class Lift_Teleport_Admin {
 
 		wp_localize_script(
 			'lift-teleport-admin',
+			'liftTeleportConfig',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'initNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
+				'batchNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
+			)
+		);
 			'liftTeleportAdmin',
 			array(
 				'baseUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
