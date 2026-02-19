@@ -64,6 +64,12 @@ class Lift_Teleport_Admin {
 			LIFT_TELEPORT_VERSION,
 			true
 		);
+		wp_localize_script(
+			'lift-teleport-admin',
+			'liftTeleportAdmin',
+			array(
+				'restUrl' => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
 
 		wp_localize_script(
 			'lift-teleport-admin',

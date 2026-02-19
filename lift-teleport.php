@@ -19,6 +19,7 @@ define( 'LIFT_TELEPORT_URL', plugin_dir_url( __FILE__ ) );
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-logger.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-migration-manager.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-admin.php';
+require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-importer.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-package-validator.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-exporter.php';
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-importer.php';
@@ -28,6 +29,7 @@ function lift_teleport_bootstrap() {
 	$validator = new Lift_Teleport_Package_Validator();
 
 	new Lift_Teleport_Admin();
+	new Lift_Teleport_Importer();
 	new Lift_Teleport_Exporter( $validator );
 	new Lift_Teleport_Importer( $validator );
 	$security = new Lift_Teleport_Security();
