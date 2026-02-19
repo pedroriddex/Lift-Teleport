@@ -68,31 +68,18 @@ class Lift_Teleport_Admin {
 			'lift-teleport-admin',
 			'liftTeleportAdmin',
 			array(
-				'restUrl' => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
-
-		wp_localize_script(
-			'lift-teleport-admin',
-			'liftTeleportConfig',
-			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'initNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
-				'batchNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
-			)
-		);
-			'liftTeleportAdmin',
-			array(
+				'restUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
 				'baseUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
 				'pollInterval' => 2000,
-				'retryBaseMs'  => 400,
+				'retryBaseMs'   => 400,
 				'retryMaxAttempts' => 4,
-				'nonce'        => wp_create_nonce( 'wp_rest' ),
-			)
-		);
-				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
-				'nonce'       => wp_create_nonce( 'lift_teleport_admin_nonce' ),
+				'restNonce'    => wp_create_nonce( 'wp_rest' ),
+				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+				'ajaxNonce'    => wp_create_nonce( 'lift_teleport_admin_nonce' ),
 				'reportNonce' => wp_create_nonce( 'lift_teleport_download_report' ),
 				'adminPostUrl' => admin_url( 'admin-post.php' ),
+				'initNonce'   => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
+				'batchNonce'  => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
 			)
 		);
 	}
