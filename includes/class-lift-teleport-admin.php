@@ -155,9 +155,10 @@ class Lift_Teleport_Admin {
 				<section class="lift-teleport__card">
 					<h2><?php esc_html_e( 'Exportar sitio', 'lift-teleport' ); ?></h2>
 					<p><?php esc_html_e( 'Empaqueta base de datos, media, plugins y temas en un archivo .lift.', 'lift-teleport' ); ?></p>
-					<button class="button button-primary button-hero" type="button" disabled>
-						<?php esc_html_e( 'Iniciar exportación (próximamente)', 'lift-teleport' ); ?>
+					<button class="button button-primary button-hero" type="button" id="lift-teleport-export-start">
+						<?php esc_html_e( 'Iniciar exportación', 'lift-teleport' ); ?>
 					</button>
+					<p id="lift-teleport-export-status" class="lift-teleport__status"><?php esc_html_e( 'Listo para exportar.', 'lift-teleport' ); ?></p>
 				</section>
 
 				<section class="lift-teleport__card">

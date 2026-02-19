@@ -61,11 +61,9 @@
 		if (typeof data.progress === 'number') {
 			setProgress(data.progress);
 		}
-
 		if (data.message) {
 			setStatus(data.message);
 		}
-
 		if (data.completed) {
 			setProgress(100);
 			setStatus('Importación completada correctamente.');
@@ -133,27 +131,8 @@
 			return;
 		}
 
-		historyBody.innerHTML = jobs
-			.map((job) => {
-				const errors = (job.logs || []).filter((log) => log.level === 'error').length;
-				const reportUrl = new URL(config.adminPostUrl);
-				reportUrl.searchParams.set('action', 'lift_teleport_download_report');
-				reportUrl.searchParams.set('job_id', job.id);
-				reportUrl.searchParams.set('_wpnonce', config.reportNonce || '');
-
-				return '<tr>' +
-					'<td><code>' + job.id + '</code></td>' +
-					'<td>' + job.file_name + '</td>' +
-					'<td>' + String(job.status).toUpperCase() + '</td>' +
-					'<td>' + job.phase + '</td>' +
-					'<td>' + job.duration_ms + ' ms</td>' +
-					'<td>' + job.chunks_processed + '/' + job.chunks_total + '</td>' +
-					'<td>' + errors + '</td>' +
-					'<td><a class="button button-secondary" href="' + reportUrl.toString() + '">Descargar</a></td>' +
-					'</tr>';
-			})
-			.join('');
-	};
+		exportButton.disabled = true;
+		exportStatus.textContent = 'Iniciando exportación…';
 
 	const loadHistory = async () => {
 		if (!historyBody || !config.ajaxUrl || !config.ajaxNonce) {
