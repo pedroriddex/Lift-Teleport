@@ -52,6 +52,16 @@ class Lift_Teleport_Admin {
 			LIFT_TELEPORT_VERSION,
 			true
 		);
+
+		wp_localize_script(
+			'lift-teleport-admin',
+			'liftTeleportConfig',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'initNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_INIT ),
+				'batchNonce' => wp_create_nonce( Lift_Teleport_Security::NONCE_IMPORT_BATCH ),
+			)
+		);
 	}
 
 	/**
