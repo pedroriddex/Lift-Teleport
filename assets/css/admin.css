@@ -125,4 +125,48 @@
 	gap: 8px;
 	flex-wrap: wrap;
 	margin-top: 12px;
+.lift-teleport__result {
+	margin-top: 14px;
+	padding: 12px;
+	border: 1px solid #d9ddff;
+	border-radius: 10px;
+	background: #f8f9ff;
+}
+
+.lift-teleport__result-message {
+	margin: 0 0 8px;
+	font-weight: 600;
+	color: #24305f;
+}
+
+.lift-teleport__result-technical {
+	white-space: pre-wrap;
+	background: #12162b;
+	color: #dce3ff;
+	padding: 10px;
+	border-radius: 8px;
+	overflow: auto;
+}
+
+.lift-teleport__history {
+	margin-top: 20px;
+	background: #fff;
+	padding: 22px;
+	border-radius: 16px;
+	box-shadow: 0 7px 28px rgba(17, 23, 69, 0.08);
+}
+
+.lift-teleport__history-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 14px;
+}
+
+.lift-teleport__history-head h2 {
+	margin: 0;
+}
+
+.lift-teleport__table-wrap {
+	overflow-x: auto;
 }
