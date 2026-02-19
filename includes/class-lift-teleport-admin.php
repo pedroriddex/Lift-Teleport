@@ -69,7 +69,6 @@ class Lift_Teleport_Admin {
 			'liftTeleportAdmin',
 			array(
 				'restUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
-				'exportRestUrl'=> esc_url_raw( rest_url( 'lift-teleport/v1/export' ) ),
 				'baseUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
 				'pollInterval' => 2000,
 				'retryBaseMs'   => 400,

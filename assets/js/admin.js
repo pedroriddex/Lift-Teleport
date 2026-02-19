@@ -4,12 +4,17 @@
 	const dropzone = document.querySelector('.lift-teleport__dropzone');
 	const bar = document.querySelector('.lift-teleport__progress-bar');
 	const status = document.querySelector('.lift-teleport__status');
-	const exportButton = document.getElementById('lift-teleport-export-start');
-	const exportStatus = document.getElementById('lift-teleport-export-status');
+	const result = document.querySelector('.lift-teleport__result');
+	const resultMessage = document.querySelector('.lift-teleport__result-message');
+	const resultTechnical = document.querySelector('.lift-teleport__result-technical');
+	const historyBody = document.getElementById('lift-teleport-history-body');
+	const refreshButton = document.getElementById('lift-teleport-refresh-history');
 
 	if (!input || !dropzone || !bar || !status || !config.restUrl || !config.restNonce) {
 		return;
 	}
+
+	const maxRetries = 3;
 
 	const setProgress = (value) => {
 		const safe = Math.max(0, Math.min(100, Number(value) || 0));
@@ -21,32 +26,37 @@
 		status.textContent = message;
 	};
 
-	const requestRest = async (baseUrl, endpoint, body, method) => {
-		const response = await window.fetch(baseUrl + endpoint, {
-			method: method || 'POST',
+	const requestRest = async (endpoint, body) => {
+		const response = await window.fetch(config.restUrl + endpoint, {
+			method: 'POST',
 			headers: {
 				'X-WP-Nonce': config.restNonce
 			},
 			body
 		});
 
-		const data = await response.json();
 		if (!response.ok) {
-			throw new Error((data && data.message) || ('HTTP ' + response.status));
+			throw new Error('HTTP ' + response.status);
 		}
-		return data;
+
+		return response.json();
 	};
 
 	const uploadFile = async (file) => {
 		const formData = new window.FormData();
 		formData.append('lift_file', file);
-		return requestRest(config.restUrl, '/upload', formData, 'POST');
+		return requestRest('/upload', formData);
 	};
 
-	const processImport = async (jobId) => {
+	const processImport = async (jobId, retry) => {
 		const formData = new window.FormData();
 		formData.append('job_id', jobId);
-		const data = await requestRest(config.restUrl, '/process', formData, 'POST');
+		const data = await requestRest('/process', formData);
+
+		if (!data) {
+			setStatus('No se recibió respuesta del servidor.');
+			return;
+		}
 
 		if (typeof data.progress === 'number') {
 			setProgress(data.progress);
@@ -60,59 +70,134 @@
 			return;
 		}
 
-		window.setTimeout(() => {
-			void processImport(jobId);
-		}, data.retryable ? 1200 : 250);
-	};
-
-	const beginImport = async (file) => {
-		setProgress(0);
-		setStatus('Subiendo ' + file.name + '…');
-		try {
-			const uploadData = await uploadFile(file);
-			if (!uploadData || !uploadData.job_id) {
-				setStatus('No se pudo iniciar la importación.');
+		if (data.retryable) {
+			if (retry >= maxRetries) {
+				setStatus('Fallo tras varios reintentos automáticos. Se ejecutó rollback.');
 				return;
 			}
-			setProgress(uploadData.progress || 5);
-			setStatus(uploadData.message || 'Importación iniciada.');
-			void processImport(uploadData.job_id);
-		} catch (error) {
-			setStatus(String(error.message || 'Error de conexión al importar.'));
+
+			setStatus('Error temporal detectado. Reintentando fase…');
+			window.setTimeout(() => {
+				void processImport(jobId, retry + 1);
+			}, 1200);
+			return;
 		}
+
+		window.setTimeout(() => {
+			void processImport(jobId, 0);
+		}, 250);
 	};
 
-	const runExport = async () => {
-		if (!exportButton || !exportStatus || !config.exportRestUrl) {
+	const asFormData = (action, extra) => {
+		const payload = new window.FormData();
+		payload.append('action', action);
+		payload.append('nonce', config.ajaxNonce || '');
+		Object.keys(extra || {}).forEach((key) => payload.append(key, extra[key]));
+		return payload;
+	};
+
+	const requestAjax = async (action, extra) => {
+		const response = await window.fetch(config.ajaxUrl, {
+			method: 'POST',
+			body: asFormData(action, extra || {})
+		});
+		const json = await response.json();
+		if (!json.success) {
+			const message = json.data && json.data.message ? json.data.message : 'Error inesperado.';
+			throw new Error(message);
+		}
+		return json.data;
+	};
+
+	const buildTechnicalDetail = (job) => {
+		const errors = (job.logs || []).filter((log) => log.level === 'error');
+		return [
+			'Job: ' + job.id,
+			'Estado: ' + job.status,
+			'Fase: ' + job.phase,
+			'Duración: ' + job.duration_ms + 'ms',
+			'Chunks: ' + job.chunks_processed + '/' + job.chunks_total,
+			'Mensaje técnico: ' + job.technical_detail,
+			errors.length ? 'Errores: ' + errors.map((entry) => entry.code + ' - ' + entry.message).join(' | ') : 'Errores: ninguno'
+		].join('\n');
+	};
+
+	const renderHistory = (jobs) => {
+		if (!historyBody) {
+			return;
+		}
+		if (!jobs.length) {
+			historyBody.innerHTML = '<tr><td colspan="8">' + historyBody.dataset.emptyMessage + '</td></tr>';
 			return;
 		}
 
 		exportButton.disabled = true;
 		exportStatus.textContent = 'Iniciando exportación…';
 
-		try {
-			const start = await requestRest(config.exportRestUrl, '/start', null, 'POST');
-			const exportId = start && start.export_id;
-			if (!exportId) {
-				throw new Error('No se recibió export_id.');
-			}
-
-			exportStatus.textContent = 'Generando paquete .lift…';
-			const payload = new window.FormData();
-			payload.append('export_id', exportId);
-			const step = await requestRest(config.exportRestUrl, '/continue', payload, 'POST');
-			const state = step && step.state ? step.state : null;
-			if (!state || state.status !== 'completed' || !state.download_url) {
-				throw new Error((state && state.last_error) || 'La exportación no terminó correctamente.');
-			}
-
-			exportStatus.textContent = 'Exportación completada. Descargando archivo .lift…';
-			window.location.href = state.download_url;
-		} catch (error) {
-			exportStatus.textContent = String(error.message || 'Error durante exportación.');
-		} finally {
-			exportButton.disabled = false;
+	const loadHistory = async () => {
+		if (!historyBody || !config.ajaxUrl || !config.ajaxNonce) {
+			return;
 		}
+		const data = await requestAjax('lift_teleport_list_jobs');
+		renderHistory(data.jobs || []);
+	};
+
+	const showResult = (job) => {
+		if (!result || !resultMessage || !resultTechnical) {
+			return;
+		}
+		result.hidden = false;
+		resultMessage.textContent = job.user_message || 'Importación finalizada.';
+		resultTechnical.textContent = buildTechnicalDetail(job);
+	};
+
+	const simulateImport = async (fileName) => {
+		const timer = window.setInterval(() => {
+			const current = Number(bar.getAttribute('aria-valuenow') || 0);
+			setProgress(Math.min(current + 10, 90));
+		}, 120);
+
+		try {
+			const data = await requestAjax('lift_teleport_run_import', { fileName });
+			window.clearInterval(timer);
+			setProgress(100);
+			setStatus(data.job.status === 'completed' ? 'Importación finalizada con éxito.' : 'Importación finalizada con incidencias.');
+			showResult(data.job);
+			await loadHistory();
+		} catch (error) {
+			window.clearInterval(timer);
+			setStatus('No se pudo ejecutar la importación. Revisa el detalle técnico.');
+			if (result && resultMessage && resultTechnical) {
+				result.hidden = false;
+				resultMessage.textContent = 'No se pudo completar la migración.';
+				resultTechnical.textContent = String(error.message);
+			}
+		}
+	};
+
+	const beginImport = async (file) => {
+		if (!file) {
+			return;
+		}
+
+		setProgress(0);
+		setStatus('Subiendo ' + file.name + '…');
+
+		try {
+			const uploadData = await uploadFile(file);
+			if (!uploadData || !uploadData.job_id) {
+				setStatus((uploadData && uploadData.message) || 'No se pudo iniciar la importación.');
+				return;
+			}
+
+			setStatus(uploadData.message || 'Importación iniciada.');
+			setProgress(uploadData.progress || 5);
+			void processImport(uploadData.job_id, 0);
+		} catch (error) {
+			setStatus('Error de conexión al iniciar importación.');
+		}
+
+		void simulateImport(file.name);
 	};
 
 	input.addEventListener('change', () => {
@@ -144,9 +229,11 @@
 		void beginImport(file);
 	});
 
-	if (exportButton) {
-		exportButton.addEventListener('click', () => {
-			void runExport();
+	if (refreshButton) {
+		refreshButton.addEventListener('click', () => {
+			void loadHistory();
 		});
 	}
+
+	void loadHistory();
 })();
