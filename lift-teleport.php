@@ -17,9 +17,11 @@ define( 'LIFT_TELEPORT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'LIFT_TELEPORT_URL', plugin_dir_url( __FILE__ ) );
 
 require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-admin.php';
+require_once LIFT_TELEPORT_PATH . 'includes/class-lift-teleport-exporter.php';
 
 function lift_teleport_bootstrap() {
 	new Lift_Teleport_Admin();
+	new Lift_Teleport_Exporter();
 }
 
 add_action( 'plugins_loaded', 'lift_teleport_bootstrap' );
