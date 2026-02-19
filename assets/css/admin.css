@@ -108,3 +108,21 @@
 	color: #4d5675;
 	font-weight: 500;
 }
+
+.lift-teleport__metrics {
+	margin-top: 12px;
+	display: grid;
+	gap: 4px;
+}
+
+.lift-teleport__metrics p {
+	margin: 0;
+	color: #4d5675;
+}
+
+.lift-teleport__controls {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-top: 12px;
+}

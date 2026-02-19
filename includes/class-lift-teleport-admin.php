@@ -52,6 +52,18 @@ class Lift_Teleport_Admin {
 			LIFT_TELEPORT_VERSION,
 			true
 		);
+
+		wp_localize_script(
+			'lift-teleport-admin',
+			'liftTeleportAdmin',
+			array(
+				'baseUrl'      => esc_url_raw( rest_url( 'lift-teleport/v1/import' ) ),
+				'pollInterval' => 2000,
+				'retryBaseMs'  => 400,
+				'retryMaxAttempts' => 4,
+				'nonce'        => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 	}
 
 	/**
@@ -89,6 +101,19 @@ class Lift_Teleport_Admin {
 
 					<div class="lift-teleport__progress" aria-live="polite" aria-atomic="true">
 						<div class="lift-teleport__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+					</div>
+
+					<div class="lift-teleport__metrics">
+						<p><strong><?php esc_html_e( 'Fase actual:', 'lift-teleport' ); ?></strong> <span data-lift-teleport-phase><?php esc_html_e( 'Esperando archivo', 'lift-teleport' ); ?></span></p>
+						<p><strong><?php esc_html_e( 'Progreso:', 'lift-teleport' ); ?></strong> <span data-lift-teleport-percent>0%</span></p>
+						<p><strong><?php esc_html_e( 'Velocidad aprox.:', 'lift-teleport' ); ?></strong> <span data-lift-teleport-speed><?php esc_html_e( 'Calculando…', 'lift-teleport' ); ?></span></p>
+						<p><strong><?php esc_html_e( 'Tiempo restante estimado:', 'lift-teleport' ); ?></strong> <span data-lift-teleport-eta><?php esc_html_e( 'Calculando…', 'lift-teleport' ); ?></span></p>
+					</div>
+
+					<div class="lift-teleport__controls">
+						<button class="button" type="button" data-lift-teleport-action="pause" disabled><?php esc_html_e( 'Pausar', 'lift-teleport' ); ?></button>
+						<button class="button" type="button" data-lift-teleport-action="resume" disabled><?php esc_html_e( 'Reanudar', 'lift-teleport' ); ?></button>
+						<button class="button button-link-delete" type="button" data-lift-teleport-action="cancel" disabled><?php esc_html_e( 'Cancelar', 'lift-teleport' ); ?></button>
 					</div>
 					<p class="lift-teleport__status"><?php esc_html_e( 'Esperando archivo .lift…', 'lift-teleport' ); ?></p>
 				</section>
