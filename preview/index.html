@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lift Teleport Admin Preview</title>
+  <link rel="stylesheet" href="../assets/css/admin.css" />
+  <style>body{background:#f0f2f8;padding:24px} .wrap{margin:0 auto}</style>
+</head>
+<body>
+  <div class="wrap lift-teleport">
+    <div class="lift-teleport__hero">
+      <div>
+        <h1>Teleport</h1>
+        <p>Migra cualquier web WordPress con un solo archivo .lift.</p>
+      </div>
+      <span class="lift-teleport__badge">Prototype</span>
+    </div>
+    <div class="lift-teleport__cards">
+      <section class="lift-teleport__card">
+        <h2>Exportar sitio</h2>
+        <p>Empaqueta base de datos, media, plugins y temas en un archivo .lift.</p>
+        <button class="button button-primary button-hero" type="button" disabled>Iniciar exportación (próximamente)</button>
+      </section>
+      <section class="lift-teleport__card">
+        <h2>Importación automática</h2>
+        <p>Arrastra tu archivo .lift y Teleport se encarga de todo.</p>
+        <label class="lift-teleport__dropzone" for="lift-teleport-file">
+          <input id="lift-teleport-file" type="file" accept=".lift" />
+          <strong>Arrastra aquí tu archivo .lift</strong>
+          <span>o haz click para seleccionarlo</span>
+        </label>
+        <div class="lift-teleport__progress" aria-live="polite" aria-atomic="true">
+          <div class="lift-teleport__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        </div>
+        <p class="lift-teleport__status">Esperando archivo .lift…</p>
+      </section>
+    </div>
+  </div>
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>

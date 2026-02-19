@@ -1,0 +1,110 @@
+.lift-teleport {
+	max-width: 1120px;
+	margin-top: 24px;
+	font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.lift-teleport__hero {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 24px;
+	background: linear-gradient(135deg, #10163a 0%, #5725d9 100%);
+	border-radius: 16px;
+	color: #fff;
+	margin-bottom: 20px;
+}
+
+.lift-teleport__hero h1 {
+	font-size: 34px;
+	line-height: 1.1;
+	margin: 0 0 8px;
+	color: #fff;
+}
+
+.lift-teleport__hero p {
+	margin: 0;
+	opacity: 0.9;
+	font-size: 16px;
+}
+
+.lift-teleport__badge {
+	background: rgba(255, 255, 255, 0.14);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	padding: 6px 12px;
+	border-radius: 100px;
+	font-weight: 600;
+}
+
+.lift-teleport__cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+	gap: 16px;
+}
+
+.lift-teleport__card {
+	background: #fff;
+	border-radius: 16px;
+	padding: 22px;
+	box-shadow: 0 7px 28px rgba(17, 23, 69, 0.08);
+}
+
+.lift-teleport__card h2 {
+	margin-top: 0;
+	font-size: 22px;
+}
+
+.lift-teleport__dropzone {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 34px 20px;
+	border: 2px dashed #b8bcff;
+	border-radius: 14px;
+	background: #f8f8ff;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	margin: 16px 0 14px;
+}
+
+.lift-teleport__dropzone:hover,
+.lift-teleport__dropzone.is-dragover {
+	border-color: #5725d9;
+	background: #f1ecff;
+}
+
+.lift-teleport__dropzone input {
+	display: none;
+}
+
+.lift-teleport__dropzone strong {
+	font-size: 18px;
+	color: #1d2033;
+	margin-bottom: 6px;
+}
+
+.lift-teleport__dropzone span {
+	color: #596080;
+}
+
+.lift-teleport__progress {
+	height: 10px;
+	border-radius: 999px;
+	background: #eceefe;
+	overflow: hidden;
+}
+
+.lift-teleport__progress-bar {
+	width: 0;
+	height: 100%;
+	background: linear-gradient(90deg, #5725d9, #7d4df4);
+	transition: width 0.18s ease;
+}
+
+.lift-teleport__status {
+	margin: 12px 0 0;
+	color: #4d5675;
+	font-weight: 500;
+}
