@@ -1,0 +1,15 @@
+{
+  "name": "lift-teleport",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lift Teleport admin app",
+  "scripts": {
+    "build": "node ./node_modules/@wordpress/scripts/bin/wp-scripts.js build assets/src/admin/index.js --output-path=build",
+    "start": "node ./node_modules/@wordpress/scripts/bin/wp-scripts.js start assets/src/admin/index.js --output-path=build",
+    "lint:js": "node ./node_modules/@wordpress/scripts/bin/wp-scripts.js lint-js assets/src/admin",
+    "test:e2e": "node ./node_modules/@wordpress/scripts/bin/wp-scripts.js test-playwright"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.24.0"
+  }
+}

@@ -1,0 +1,8 @@
+.DS_Store
+.codex/
+node_modules/
+.tmp-playwright/
+test-results/
+.phpunit.result.cache
+release-artifacts/
+*.zip
